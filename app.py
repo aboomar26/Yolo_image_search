@@ -3,11 +3,15 @@ import sys
 import os
 from pathlib import Path
 import time
+from src.inference import YOLOv11iference
+from  src.utils import save_metadata , load_metadata , get_unique_classes_count
+
 
 def init_session_state():
     session_default = {
-        "image_dir" : "path",
-        'option' :"process new image"
+        "metadaat" : None,
+        "unique_classes" : [],
+        "count_options" : {},
     }
 
     for key,value in session_default.items():
@@ -17,7 +21,7 @@ def init_session_state():
 init_session_state()
 
 st.set_page_config(page_title = "YOLO11 search app" , layout = "wide")
-st.title("Computer Cision Powered Search Aoolication")
+st.title("Computer Cision Powered Search Application")
 
 
 option = st.radio("choose an option" ,("process new image" , "Load eisting metadata"),
@@ -36,9 +40,14 @@ if option == "process new image":
             if image_dir:
                 try:
                     with st.spinner("processing..."):
-                        time.sleep(3)
-                        st.success("the process is done")
-                    pass
+                        inference = YOLOv11iference(model_path)
+                        metadata = inference.process_directory(image_dir)
+                        metadata_path = save_metadata(metadata,image_dir)
+                        st.success(f"processed {len(metadata)} images. metadata sves to:")
+                        st.code(str(metadata_path))
+                        st.session_state.metadata = metadata
+                        st.session_state.unique_classes , st.session_state.count_options=get_unique_classes_count(metadata)
+                    
                 except Exception as e:
                     st.error(f"Error during inference: {e}")
             else:
@@ -54,12 +63,14 @@ else:
             if metadata_path:
                 try:
                     with st.spinner("processing..."):
-                        time.sleep(3)
-                        st.success("the process is done")
+                        metadata = load_metadata(metadata_path)
+                        st.session_state.metadata = metadata
+                        st.session_state.unique_classes , st.session_state.count_options=get_unique_classes_count(metadata)
+                        st.success(f"successfully loaded metadata for  {len(metadata)} images.")
                     pass
                 except Exception as e:
                     st.error(f"Error Loading metadata: {e}")
             else:
                 st.warning("Please enter an metadata file path")
-
+ 
 

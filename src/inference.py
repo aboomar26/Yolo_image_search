@@ -49,7 +49,7 @@ class YOLOv11iference:
             det['count'] = class_counts[det['class']]
 
         return {
-            'image_path' : image_path,
+            'image_path' : str(image_path),
             'detection': detection,
             'total_objects' : len(detection),
             'unique_class' : list(class_counts.keys()),
@@ -69,9 +69,11 @@ class YOLOv11iference:
 
         for img_path in image_paths:
             try:
-                metadata.extend(self.process_image(img_path)) 
+                metadata.append(self.process_image(img_path)) 
             except Exception as e:
                 print(f"Error processing {img_path} : {str(e)}")
+
+        return metadata
 
 
         
