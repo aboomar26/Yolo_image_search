@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
-
+from PIL import Image
+import io
+import base64
 
 
 def ensure_processed_dir(raw_path):
@@ -10,6 +12,8 @@ def ensure_processed_dir(raw_path):
     return processed_path
 
 
+
+
 def save_metadata(metadata,raw_path):
     processed_path = ensure_processed_dir(raw_path)
 
@@ -17,6 +21,8 @@ def save_metadata(metadata,raw_path):
     with open(output_path , 'w') as f:
         json.dump(metadata , f)
     return output_path
+
+
 
 
 def load_metadata(metadata_path):
@@ -31,6 +37,8 @@ def load_metadata(metadata_path):
     with open(metadata_path,'r') as f:
         return json.load(f)
     
+
+
 
 def get_unique_classes_count(metadata):
     unique_classes = set()
@@ -49,3 +57,10 @@ def get_unique_classes_count(metadata):
     
     return unique_classes , count_options
 
+
+
+def image_to_base64(image: Image.Image) -> str:
+    buffered = io.BytesIO()
+    image.save(buffered, format="PNG")
+    img_bytes = buffered.getvalue()
+    return base64.b64encode(img_bytes).decode("utf-8")
