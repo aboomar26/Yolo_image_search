@@ -179,10 +179,4 @@ The application generates metadata in the following JSON format:
 - [Streamlit Documentation](https://docs.streamlit.io/)
 - [CUDA Installation Guide](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/)
 
-## 📄 License
 
-This project is part of a computer vision course. Please refer to the course materials for licensing information.
-
----
-
-**Built with ❤️ using YOLO11 and Streamlit**
