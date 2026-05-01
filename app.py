@@ -102,7 +102,7 @@ st.markdown(f"""
 
 
 
-option = st.radio("choose an option" ,("process new image" , "Load eisting metadata"),
+option = st.radio("choose an option" ,("process new image" , "Load existing metadata"),
          horizontal = True)
 
 
